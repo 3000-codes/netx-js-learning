@@ -32,3 +32,9 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+
+## route groups
+
+- 命名规则`(group-name)`的文件夹
+- url 会忽略`group-name`，如`/(group-name)/page-name`会变成`/page-name`
+- 可以为每个 route group 添加一个`layout.tsx`，用于包裹该 group 下的所有页面,从而实现多个根布局
