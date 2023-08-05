@@ -33,8 +33,24 @@ The easiest way to deploy your Next.js app is to use the [Vercel Platform](https
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
 
-## route groups
+## route groups 路由组
 
 - 命名规则`(group-name)`的文件夹
 - url 会忽略`group-name`，如`/(group-name)/page-name`会变成`/page-name`
 - 可以为每个 route group 添加一个`layout.tsx`，用于包裹该 group 下的所有页面,从而实现多个根布局
+
+## dynamic route 动态路由
+
+- 命名规则`[param-name]`的文件夹
+- url 会根据`param-name`的值变化，如`/page/[id]`会变成`/page/1`
+- 与请求搭配使用：
+  - 可以先请求好数据，再渲染页面
+  - 多个重复请求（即使跨布局，跨页面）会合并成一个请求，减少请求次数
+
+### 嵌套动态路由
+
+| Route                            | Example       | Params                      |
+| -------------------------------- | ------------- | --------------------------- |
+| `app/pages/[...slug]/page.tsx`   | `/page/1/2/3` | `{ slug: ['1', '2', '3'] }` |
+| `app/pages/[[...slug]]/page.tsx` | `/page/1/2/3` | `{ slug:['1', '2', '3'] }`  |
+| `app/pages/[[...slug]]/page.tsx` | `/page`       | `{  }`                      |
