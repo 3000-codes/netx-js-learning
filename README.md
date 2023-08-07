@@ -47,10 +47,74 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/deploym
   - 可以先请求好数据，再渲染页面
   - 多个重复请求（即使跨布局，跨页面）会合并成一个请求，减少请求次数
 
-### 嵌套动态路由
+## 嵌套动态路由
 
 | Route                            | Example       | Params                      |
 | -------------------------------- | ------------- | --------------------------- |
 | `app/pages/[...slug]/page.tsx`   | `/page/1/2/3` | `{ slug: ['1', '2', '3'] }` |
 | `app/pages/[[...slug]]/page.tsx` | `/page/1/2/3` | `{ slug:['1', '2', '3'] }`  |
 | `app/pages/[[...slug]]/page.tsx` | `/page`       | `{  }`                      |
+
+## 组件加载状态路由
+
+`Suspense`组件可以用于在组件加载时显示 loading 状态
+
+```tsx
+import { Suspense } from "react";
+
+function Page() {
+  return (
+    <Suspense fallback={<Loading />}>
+      <Component />
+    </Suspense>
+  );
+}
+```
+
+## 错误处理路由
+
+`error.tsx`会在页面渲染出错时显示,必须在文件顶部声明`"use client"`，否则会在服务端渲染时显示
+
+```tsx
+"use client"; //必须在文件顶部
+function Error({ error, reset }: { error: Error; reset: () => void }) {
+  return (
+    <div>
+      <h1>Error</h1>
+      <pre>{error.message}</pre>
+      <button onClick={reset}>Reset</button>
+    </div>
+  );
+}
+```
+
+## 并行路由(Parallel Routing)
+
+在同一个 layout 下，可以并行渲染多个页面，从而减少页面切换时的白屏时间
+
+使用`@pageName`语法，可以声明一个需要并行渲染的页面,这些页面可以有自己的`error.tsx`,`loading.tsx`和`default.tsx`
+
+```tsx
+// 使用
+export default function RootLayout({
+  children,
+  team,
+  analyze,
+}: {
+  children: React.ReactNode;
+  team: React.ReactNode; // @team
+  analyze: React.ReactNode; // @analyze
+}) {
+  return (
+    <html lang="en">
+      <body className={inter.className}>
+        {children}
+        {team}
+        {analyze}
+      </body>
+    </html>
+  );
+}
+```
+
+## 拦截路由
